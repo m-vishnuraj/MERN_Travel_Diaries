@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "./routing/user-routes";
+import postRouter from "./routing/post-routes";
 
 const app = express();
 dotenv.config();
@@ -9,6 +10,7 @@ dotenv.config();
 // middleware
 app.use(express.json());
 app.use("/user", userRouter);
+app.use("/posts", postRouter);
 
 // connection to database
 mongoose
