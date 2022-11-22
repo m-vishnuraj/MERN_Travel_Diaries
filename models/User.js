@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 
 const userSchema = new Schema({
   name: {
@@ -15,7 +15,7 @@ const userSchema = new Schema({
     required: true,
     minLength: 6,
   },
-  posts: [{ type: String }],
+  posts: [{ type: mongoose.Types.ObjectId, ref: "Post" }],
 });
 
 export default model("User", userSchema);

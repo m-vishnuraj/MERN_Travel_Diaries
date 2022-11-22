@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import Post from "../models/Post";
+import User from "../models/User";
 
 // get all posts
 export const getAllPost = async (req, res) => {
@@ -9,7 +11,7 @@ export const getAllPost = async (req, res) => {
     console.log(err);
   }
   if (!posts) {
-    return res.status(500).json({ message: "Unexpected error occured" });
+    return res.status(500).json({ message: "Unexpected error Occurred" });
   }
 
   res.status(200).json({ posts: posts });
@@ -33,6 +35,16 @@ export const addPost = async (req, res) => {
     return res.status(422).json({ message: "Invalid Data" });
   }
 
+  let existingUser;
+  try {
+    existingUser = await User.findById(user);
+  } catch (err) {
+    console.log(err);
+  }
+  if (!existingUser) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
   let post;
   try {
     post = new Post({
@@ -43,7 +55,13 @@ export const addPost = async (req, res) => {
       date: new Date(`${date}`),
       user,
     });
-    post = await post.save();
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    existingUser.posts.push(post);
+    await existingUser.save({ session });
+    post = await post.save({ session });
+    session.commitTransaction();
   } catch (err) {
     console.log(err);
   }
@@ -114,6 +132,11 @@ export const deletePost = async (req, res) => {
   const id = req.params.id;
   let post;
   try {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    post = await Post.findById(id).populate("user");
+    post.user.posts.pull(post);
+    await post.user.save({ session });
     post = await Post.findByIdAndRemove(id);
   } catch (err) {
     console.log(err);
