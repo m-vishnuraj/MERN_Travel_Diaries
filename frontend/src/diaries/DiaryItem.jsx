@@ -1,12 +1,21 @@
 import { Alert, Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Snackbar, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
-import EditIcon from '@mui/icons-material/Edit';
+import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Box } from '@mui/system';
 import { postDelete } from '../api-helpers/Helpers';
+import { Link } from "react-router-dom";
 
-const DiaryItem = ({ title, description, image, location, date, id, user }) => {
+
+const DiaryItem = ({ title,
+    description,
+    image,
+    location,
+    date,
+    id,
+    user,
+    name, }) => {
 
     const [open, setOpen] = useState(false);
 
@@ -66,6 +75,7 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
                     </Typography>
                 </Box>
             </CardContent>
+
             {isLoggedInUser && <CardActions sx={{ marginLeft: "auto" }}>
                 <IconButton color="warning"><EditIcon /></IconButton>
                 <IconButton onClick={handleDelete} color="error">
@@ -86,6 +96,13 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
                     This is a success message!
                 </Alert>
             </Snackbar>
+            {(isLoggedInUser && <CardActions sx={{ marginLeft: "auto" }}>
+                <IconButton LinkComponent={Link} to={`/post/${id}`} color="warning">
+                    <ModeEditOutlineIcon />
+                </IconButton>
+                <IconButton color="error"><DeleteForeverIcon /></IconButton>
+            </CardActions>)}
+
         </Card >
     )
 }
