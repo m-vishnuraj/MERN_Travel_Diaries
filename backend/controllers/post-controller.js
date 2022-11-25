@@ -138,12 +138,13 @@ export const deletePost = async (req, res) => {
     post.user.posts.pull(post);
     await post.user.save({ session });
     post = await Post.findByIdAndRemove(id);
+    session.commitTransaction();
   } catch (err) {
-    console.log(err);
+    return console.log(err);
+  }
+  if (!post) {
+    return res.status(500).json({ message: "Unable to delete" });
   }
 
-  if (!post) {
-    return res.status(500).json({ message: "Unable to Delete" });
-  }
   return res.status(200).json({ message: "Deleted Successfully" });
 };
