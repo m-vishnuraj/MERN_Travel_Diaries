@@ -94,20 +94,21 @@ export const getPostById = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   const id = req.params.id;
-  const { title, description, image, location, date } = req.body;
+  const { title, description, location, image } = req.body;
+
   if (
     !title &&
     title.trim() === "" &&
     !description &&
     description.trim() === "" &&
-    !image &&
-    image.trim() === "" &&
     !location &&
     location.trim() === "" &&
-    !date
+    !image &&
+    image.trim() === ""
   ) {
     return res.status(422).json({ message: "Invalid Data" });
   }
+
   let post;
   try {
     post = await Post.findByIdAndUpdate(id, {
@@ -115,15 +116,15 @@ export const updatePost = async (req, res) => {
       description,
       image,
       location,
-      date: new Date(`${date}`),
     });
   } catch (err) {
-    console.log(err);
+    return console.log(err);
   }
+
   if (!post) {
-    return res.status(500).json({ message: "Unable to Update" });
+    return res.status(500).json({ message: "Unable to update" });
   }
-  return res.status(200).json({ message: "Updated Successfully", post: post });
+  return res.status(200).json({ message: "Updated Successfully" });
 };
 
 // delete post
