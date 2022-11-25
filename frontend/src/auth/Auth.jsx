@@ -2,34 +2,43 @@ import { Box, Button, FormLabel, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { sendAuthRequest } from '../api-helpers/Helpers';
 import { authActions } from '../store';
 
 const Auth = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [isSignup, setIsSignup] = useState(false);
+    const [isSignup, setIsSignup] = useState(true);
+    const onResReceived = (data) => {
+        if (isSignup) {
+            localStorage.setItem("userId", data.user._id);
+        } else {
+            localStorage.setItem("userId", data.id);
+        }
+        dispatch(authActions.login());
+        navigate("/diaries");
+    };
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(inputs);
+
         if (isSignup) {
             sendAuthRequest(true, inputs)
-                .then(data => localStorage.setItem("userId", data.user._id))
-                .then(() => { dispatch(authActions.login()) })
-                .catch(err => console.log(err));
+                .then(onResReceived)
+                .catch((err) => console.log(err));
         } else {
             sendAuthRequest(false, inputs)
-                .then(data => localStorage.setItem("userId", data.id))
-                .then(() => { dispatch(authActions.login()) })
-                .catch(err => console.log(err));
+                .then(onResReceived)
+                .catch((err) => console.log(err));
         }
-    }
+    };
     const [inputs, setInputs] = useState({ name: "", email: "", password: "" });
-    // for input value from text field
     const handleChange = (e) => {
         setInputs((prevState) => ({
             ...prevState,
             [e.target.name]: e.target.value,
-        }))
+        }));
     };
     return (
         <Box
