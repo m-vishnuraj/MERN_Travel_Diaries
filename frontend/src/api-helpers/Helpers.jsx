@@ -6,7 +6,7 @@ export const getAllPosts = async () => {
         return console.log("Some error occurred");
     }
 
-    const data = await res.data;
+    const data = res.data;
     return data;
 }
 
@@ -40,11 +40,42 @@ export const addPost = async (data) => {
     return resData;
 }
 
+
+export const getPostDetails = async (id) => {
+    const res = await axios.get(`/posts/${id}`).catch((err) => console.log(err));
+    if (res.status !== 200) {
+        return console.log("Unable to fetch diary");
+    }
+
+    const resData = await res.data;
+    return resData;
+};
+
+export const postUpdate = async (data, id) => {
+    const res = await axios
+        .put(`/posts/${id}`, {
+            title: data.title,
+            description: data.description,
+            location: data.location,
+            image: data.imageUrl,
+        })
+        .catch((err) => console.log(err));
+
+    if (res.status !== 200) {
+        return console.log("Unable to update");
+    }
+
+    const resData = await res.data;
+    return resData;
+};
+
+
+
 export const postDelete = async (id) => {
     const res = await axios.delete(`/posts/${id}`)
         .catch((err) => console.log(err));
     if (res.status !== 200) {
-        return console.log("Uable to delete");
+        return console.log("Unable to delete");
     }
 
     const data = await res.data;
