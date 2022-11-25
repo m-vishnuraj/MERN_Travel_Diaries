@@ -1,11 +1,14 @@
-import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@mui/material';
-import React from 'react';
+import { Alert, Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Snackbar, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Box } from '@mui/system';
+import { postDelete } from '../api-helpers/Helpers';
 
 const DiaryItem = ({ title, description, image, location, date, id, user }) => {
+
+    const [open, setOpen] = useState(false);
 
     const isLoggedInUser = () => {
         if (localStorage.getItem("userId") === user) {
@@ -13,6 +16,12 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
         }
         return false;
     }
+    const handleDelete = () => {
+        postDelete(id)
+            .then((data) => console.log(data))
+            .catch((err) => console.log(err));
+        setOpen(true);
+    };
     return (
         <Card sx={{
             width: "50%",
@@ -59,8 +68,24 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
             </CardContent>
             {isLoggedInUser && <CardActions sx={{ marginLeft: "auto" }}>
                 <IconButton color="warning"><EditIcon /></IconButton>
-                <IconButton color="error"><DeleteForeverIcon /></IconButton>
+                <IconButton onClick={handleDelete} color="error">
+                    <DeleteForeverIcon />
+                </IconButton>
             </CardActions>}
+
+            <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={() => setOpen(false)}
+            >
+                <Alert
+                    onClose={() => setOpen(false)}
+                    severity="success"
+                    sx={{ width: "100%" }}
+                >
+                    This is a success message!
+                </Alert>
+            </Snackbar>
         </Card >
     )
 }
