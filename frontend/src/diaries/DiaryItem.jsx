@@ -1,10 +1,12 @@
-import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@mui/material';
-import React from 'react';
+import { Alert, Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Snackbar, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Box } from '@mui/system';
+import { postDelete } from '../api-helpers/Helpers';
 import { Link } from "react-router-dom";
+
 
 const DiaryItem = ({ title,
     description,
@@ -15,12 +17,20 @@ const DiaryItem = ({ title,
     user,
     name, }) => {
 
+    const [open, setOpen] = useState(false);
+
     const isLoggedInUser = () => {
         if (localStorage.getItem("userId") === user) {
             return true;
         }
         return false;
     }
+    const handleDelete = () => {
+        postDelete(id)
+            .then((data) => console.log(data))
+            .catch((err) => console.log(err));
+        setOpen(true);
+    };
     return (
         <Card sx={{
             width: "50%",
@@ -65,12 +75,34 @@ const DiaryItem = ({ title,
                     </Typography>
                 </Box>
             </CardContent>
+
+            {isLoggedInUser && <CardActions sx={{ marginLeft: "auto" }}>
+                <IconButton color="warning"><EditIcon /></IconButton>
+                <IconButton onClick={handleDelete} color="error">
+                    <DeleteForeverIcon />
+                </IconButton>
+            </CardActions>}
+
+            <Snackbar
+                open={open}
+                autoHideDuration={6000}
+                onClose={() => setOpen(false)}
+            >
+                <Alert
+                    onClose={() => setOpen(false)}
+                    severity="success"
+                    sx={{ width: "100%" }}
+                >
+                    This is a success message!
+                </Alert>
+            </Snackbar>
             {(isLoggedInUser && <CardActions sx={{ marginLeft: "auto" }}>
                 <IconButton LinkComponent={Link} to={`/post/${id}`} color="warning">
                     <ModeEditOutlineIcon />
                 </IconButton>
                 <IconButton color="error"><DeleteForeverIcon /></IconButton>
             </CardActions>)}
+
         </Card >
     )
 }

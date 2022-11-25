@@ -6,7 +6,7 @@ export const getAllPosts = async () => {
         return console.log("Some error occurred");
     }
 
-    const data = res.data;
+    const data = await res.data;
     return data;
 }
 
@@ -69,3 +69,13 @@ export const postUpdate = async (data, id) => {
     return resData;
 };
 
+export const postDelete = async (id) => {
+    const res = await axios.delete(`/posts/${id}`)
+        .catch((err) => console.log(err));
+    if (res.status !== 200) {
+        return console.log("Uable to delete");
+    }
+
+    const data = await res.data;
+    return data;
+}
