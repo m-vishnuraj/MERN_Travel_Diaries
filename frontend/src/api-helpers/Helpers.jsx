@@ -22,3 +22,20 @@ export const sendAuthRequest = async (signUp, data) => {
     const resData = await res.data;
     return resData;
 };
+
+export const addPost = async (data) => {
+    const res = await axios.post("/posts/", {
+        title: data.title,
+        description: data.description,
+        location: data.location,
+        image: data.imageUrl,
+        date: data.date,
+        user: localStorage.getItem("userId"),
+    }).catch((err) => console.log(err));
+    if (res.status !== 201) {
+        return console.log("Error Occurred");
+    }
+
+    const resData = await res.data;
+    return resData;
+}
