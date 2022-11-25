@@ -5,7 +5,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Box } from '@mui/system';
 
-const DiaryItem = ({ title, description, image, location, date, id }) => {
+const DiaryItem = ({ title, description, image, location, date, id, user }) => {
+
+    const isLoggedInUser = () => {
+        if (localStorage.getItem("userId") === user) {
+            return true;
+        }
+        return false;
+    }
     return (
         <Card sx={{
             width: "50%",
@@ -50,10 +57,10 @@ const DiaryItem = ({ title, description, image, location, date, id }) => {
                     </Typography>
                 </Box>
             </CardContent>
-            <CardActions sx={{ marginLeft: "auto" }}>
+            {isLoggedInUser && <CardActions sx={{ marginLeft: "auto" }}>
                 <IconButton color="warning"><EditIcon /></IconButton>
                 <IconButton color="error"><DeleteForeverIcon /></IconButton>
-            </CardActions>
+            </CardActions>}
         </Card >
     )
 }

@@ -1,6 +1,7 @@
 import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import { addPost } from '../api-helpers/Helpers';
 
 const Add = () => {
     const [inputs, setInputs] = useState({
@@ -20,6 +21,9 @@ const Add = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(inputs);
+        addPost(inputs)
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
     };
 
     return (
