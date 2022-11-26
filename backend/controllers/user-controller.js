@@ -69,3 +69,20 @@ export const login = async (req, res, next) => {
     message: "Login Successful",
   });
 };
+
+// get user by id
+export const getUserById = async (req, res) => {
+  const id = req.params.id;
+
+  let user;
+  try {
+    user = await User.findById(id).populate("posts");
+  } catch (err) {
+    return console.log(err);
+  }
+  if (!user) {
+    return res.status(404).json({ message: "No user found" });
+  }
+
+  return res.status(200).json({ user });
+};

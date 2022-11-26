@@ -1,9 +1,4 @@
-import { Button, FormLabel, TextField, Typography } from '@mui/material';
-import { Box } from '@mui/system';
-import React, { useEffect, useState } from 'react'
-import TravelExploreIcon from '@mui/icons-material/TravelExplore';
-import { useParams } from 'react-router-dom';
-import { getPostDetails, postUpdate } from '../api-helpers/Helpers';
+
 
 const DiaryUpdate = () => {
     const [post, setPost] = useState();
@@ -115,5 +110,3 @@ const DiaryUpdate = () => {
     );
 };
 
-
-export default DiaryUpdate
