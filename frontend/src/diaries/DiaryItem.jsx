@@ -1,21 +1,40 @@
-import { Alert, Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Snackbar, Typography } from '@mui/material';
-import React, { useState } from 'react';
-import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Box } from '@mui/system';
-import { postDelete } from '../api-helpers/Helpers';
+import {
+    Alert,
+    Avatar,
+    Card,
+    CardActions,
+    CardContent,
+    CardHeader,
+    IconButton,
+    Snackbar,
+    Typography,
+} from "@mui/material";
+import { Box } from "@mui/system";
+import EditLocationAltIcon from "@mui/icons-material/EditLocationAlt";
+import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import React, { useState } from "react";
 
-const DiaryItem = ({ title, description, image, location, date, id, user }) => {
-
+import { Link } from "react-router-dom";
+import { postDelete } from "../api-helpers/Helpers";
+const DiaryItem = ({
+    title,
+    description,
+    image,
+    location,
+    date,
+    id,
+    user,
+    name,
+}) => {
     const [open, setOpen] = useState(false);
-
     const isLoggedInUser = () => {
         if (localStorage.getItem("userId") === user) {
             return true;
         }
         return false;
-    }
+    };
+
     const handleDelete = () => {
         postDelete(id)
             .then((data) => console.log(data))
@@ -23,19 +42,21 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
         setOpen(true);
     };
     return (
-        <Card sx={{
-            width: "50%",
-            height: "60vh",
-            margin: 1,
-            padding: 1,
-            display: "flex",
-            flexDirection: "column",
-            boxShadow: "5px  5px  10px #ccc"
-        }}>
+        <Card
+            sx={{
+                width: "50%",
+                height: "auto",
+                margin: 1,
+                padding: 1,
+                display: "flex",
+                flexDirection: "column",
+                boxShadow: "5px 5px 10px #ccc",
+            }}
+        >
             <CardHeader
                 avatar={
                     <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-                        R
+                        {name.charAt(0)}
                     </Avatar>
                 }
                 action={
@@ -44,34 +65,41 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
                     </IconButton>
                 }
                 title={location}
+                header={location}
                 subheader={date}
             />
-            <CardMedia
-                component="img"
-                height="194"
-                src={image}
-                alt={title}
-            />
+
+            <img height="194" src={image} alt={title} />
             <CardContent>
                 <Typography paddingBottom={1} variant="h6" color="text.secondary">
                     {title}
                 </Typography>
                 <hr />
-                <Box paddingTop={1} display={"flex"} >
-                    <Typography width="170px" fontWeight={"bold"} variant="div">
-                        Vishnuraj M
+                <Box paddingTop={1} display="flex">
+                    <Typography
+                        width="auto"
+                        sx={{ mr: 1 }}
+                        fontWeight={"bold"}
+                        variant="caption"
+                    >
+                        {name}:
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
                 </Box>
             </CardContent>
-            {isLoggedInUser && <CardActions sx={{ marginLeft: "auto" }}>
-                <IconButton color="warning"><EditIcon /></IconButton>
-                <IconButton onClick={handleDelete} color="error">
-                    <DeleteForeverIcon />
-                </IconButton>
-            </CardActions>}
+
+            {isLoggedInUser() && (
+                <CardActions sx={{ marginLeft: "auto" }}>
+                    <IconButton LinkComponent={Link} to={`/post/${id}`} color="warning">
+                        <ModeEditOutlineIcon />
+                    </IconButton>
+                    <IconButton onClick={handleDelete} color="error">
+                        <DeleteForeverIcon />
+                    </IconButton>
+                </CardActions>
+            )}
 
             <Snackbar
                 open={open}
@@ -86,8 +114,8 @@ const DiaryItem = ({ title, description, image, location, date, id, user }) => {
                     This is a success message!
                 </Alert>
             </Snackbar>
-        </Card >
-    )
-}
+        </Card>
+    );
+};
 
-export default DiaryItem
+export default DiaryItem;

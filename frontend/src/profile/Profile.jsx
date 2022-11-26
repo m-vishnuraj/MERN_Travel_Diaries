@@ -1,12 +1,12 @@
 import React from 'react'
 import { Box, Button, Typography } from '@mui/material';
 import { useEffect } from 'react'
-import { getUserDetails } from '../api-helpers/Helpers'
 import { useState } from 'react';
 import DiaryItem from '../diaries/DiaryItem';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../store';
 import { useNavigate } from 'react-router-dom';
+import { getUserDetails } from '../api-helpers/Helpers';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Profile = () => {
     const handleClick = () => {
         dispatch(authActions.logout());
         localStorage.removeItem("userId");
-        navigate("/");
+        navigate("/diaries");
     }
     return (
         <Box display="flex" flexDirection={"column"}>

@@ -3,34 +3,36 @@ import Post from "../models/Post";
 import User from "../models/User";
 
 // get all posts
-export const getAllPost = async (req, res) => {
+export const getAllPosts = async (req, res) => {
   let posts;
   try {
-    posts = await Post.find();
+    posts = await Post.find().populate("user");
   } catch (err) {
-    console.log(err);
-  }
-  if (!posts) {
-    return res.status(500).json({ message: "Unexpected error Occurred" });
+    return console.log(err);
   }
 
-  res.status(200).json({ posts: posts });
+  if (!posts) {
+    return res.status(500).json({ message: "Unexpected Error Occurred" });
+  }
+
+  return res.status(200).json({ posts });
 };
 
 // add post
 export const addPost = async (req, res) => {
-  const { title, description, image, location, date, user } = req.body;
+  const { title, description, location, date, image, user } = req.body;
+
   if (
     !title &&
     title.trim() === "" &&
     !description &&
     description.trim() === "" &&
-    !image &&
-    image.trim() === "" &&
     !location &&
     location.trim() === "" &&
     !date &&
-    !user
+    !user &&
+    !image &&
+    image.trim() === ""
   ) {
     return res.status(422).json({ message: "Invalid Data" });
   }
@@ -39,13 +41,15 @@ export const addPost = async (req, res) => {
   try {
     existingUser = await User.findById(user);
   } catch (err) {
-    console.log(err);
+    return console.log(err);
   }
+
   if (!existingUser) {
     return res.status(404).json({ message: "User not found" });
   }
 
   let post;
+
   try {
     post = new Post({
       title,
@@ -63,12 +67,13 @@ export const addPost = async (req, res) => {
     post = await post.save({ session });
     session.commitTransaction();
   } catch (err) {
-    console.log(err);
+    return console.log(err);
   }
+
   if (!post) {
-    return res.status(500).json({ message: "Unexpected error occurred" });
+    return res.status(500).json({ message: "Unexpected Error Occurred" });
   }
-  return res.status(201).json({ post: post });
+  return res.status(201).json({ post });
 };
 
 // get post by id
@@ -81,33 +86,33 @@ export const getPostById = async (req, res) => {
   try {
     post = await Post.findById(id);
   } catch (err) {
-    console.log(err);
+    return console.log(err);
   }
   if (!post) {
-    return res.status(404).json({ message: "Post not found" });
+    return res.status(404).json({ message: "No post found" });
   }
-
-  return res.status(200).json({ post: post });
+  return res.status(200).json({ post });
 };
 
 // update post
 
 export const updatePost = async (req, res) => {
   const id = req.params.id;
-  const { title, description, image, location, date } = req.body;
+  const { title, description, location, image } = req.body;
+
   if (
     !title &&
     title.trim() === "" &&
     !description &&
     description.trim() === "" &&
-    !image &&
-    image.trim() === "" &&
     !location &&
     location.trim() === "" &&
-    !date
+    !image &&
+    image.trim() === ""
   ) {
     return res.status(422).json({ message: "Invalid Data" });
   }
+
   let post;
   try {
     post = await Post.findByIdAndUpdate(id, {
@@ -115,15 +120,15 @@ export const updatePost = async (req, res) => {
       description,
       image,
       location,
-      date: new Date(`${date}`),
     });
   } catch (err) {
-    console.log(err);
+    return console.log(err);
   }
+
   if (!post) {
-    return res.status(500).json({ message: "Unable to Update" });
+    return res.status(500).json({ message: "Unable to update" });
   }
-  return res.status(200).json({ message: "Updated Successfully", post: post });
+  return res.status(200).json({ message: "Updated Successfully" });
 };
 
 // delete post

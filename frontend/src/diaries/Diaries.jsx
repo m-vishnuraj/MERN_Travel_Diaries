@@ -1,7 +1,8 @@
-import { Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { getAllPosts } from '../api-helpers/Helpers';
-import DiaryItem from './DiaryItem';
+import { Box } from "@mui/system";
+import React, { useEffect, useState } from "react";
+import { getAllPosts } from "../api-helpers/Helpers";
+
+import DiaryItem from "./DiaryItem";
 
 const Diaries = () => {
     const [posts, setPosts] = useState();
@@ -10,7 +11,6 @@ const Diaries = () => {
             .then((data) => setPosts(data?.posts))
             .catch((err) => console.log(err));
     }, []);
-
     return (
         <Box
             display="flex"
@@ -35,7 +35,7 @@ const Diaries = () => {
                     />
                 ))}
         </Box>
-    )
-}
+    );
+};
 
-export default Diaries
+export default Diaries;
