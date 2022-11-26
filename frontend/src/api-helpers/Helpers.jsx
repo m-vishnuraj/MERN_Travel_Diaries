@@ -102,6 +102,7 @@ export const postUpdate = async (data, id) => {
     return resData;
 };
 
+
 export const postDelete = async (id) => {
     const res = await axios
         .delete(`/posts/${id}`)

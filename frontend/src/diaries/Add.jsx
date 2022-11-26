@@ -1,6 +1,4 @@
-import { Box, Button, FormLabel, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
-import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+
 
 import { useNavigate } from "react-router-dom";
 import { addPost } from "../api-helpers/Helpers";
@@ -19,10 +17,7 @@ const Add = () => {
             [e.target.name]: e.target.value,
         }));
     };
-    const onResReceived = (data) => {
-        console.log(data);
-        navigate("/diaries");
-    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(inputs);
