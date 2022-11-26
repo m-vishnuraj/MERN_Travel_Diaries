@@ -31,13 +31,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/diaries" element={<Diaries />} />
           <Route path="/auth" element={<Auth />} />
-          {isLoggedIn && (
-            <>
-              <Route path="/add" element={<Add />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/post/:id" element={<DiaryUpdate />} />{" "}
-            </>
-          )}
+
         </Routes>
       </section>
     </div>
