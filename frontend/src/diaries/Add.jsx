@@ -1,17 +1,15 @@
-import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
-import React, { useState } from 'react';
-import TravelExploreIcon from '@mui/icons-material/TravelExplore';
-import { addPost } from '../api-helpers/Helpers';
-import { useNavigate } from 'react-router-dom';
 
+
+import { useNavigate } from "react-router-dom";
+import { addPost } from "../api-helpers/Helpers";
 const Add = () => {
     const navigate = useNavigate();
     const [inputs, setInputs] = useState({
-        title: '',
-        description: '',
-        date: '',
-        location: '',
-        image: '',
+        title: "",
+        description: "",
+        location: "",
+        imageUrl: "",
+        date: "",
     });
     const handleChange = (e) => {
         setInputs((prevState) => ({
@@ -20,11 +18,6 @@ const Add = () => {
         }));
     };
 
-    const onResReceived = (data) => {
-        console.log(data);
-        navigate("/diaries");
-    }
-
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(inputs);
@@ -32,7 +25,6 @@ const Add = () => {
             .then(onResReceived)
             .catch((err) => console.log(err));
     };
-
     return (
         <Box display="flex" flexDirection={"column"} width="100%" height="100%">
             <Box display="flex" margin="auto" padding={2}>
@@ -100,7 +92,7 @@ const Add = () => {
                     <Button
                         type="submit"
                         color="warning"
-                        sx={{ width: "50%", margin: "auto", mt: 2, borderRadius: 10 }}
+                        sx={{ width: "50%", margin: "auto", mt: 2, borderRadius: 7 }}
                         variant="contained"
                     >
                         Post
@@ -111,4 +103,4 @@ const Add = () => {
     );
 };
 
-export default Add
+export default Add;

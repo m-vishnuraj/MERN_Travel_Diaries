@@ -1,11 +1,9 @@
-import { Box, Button, FormLabel, TextField, Typography } from '@mui/material'
-import React from 'react'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { sendAuthRequest } from '../api-helpers/Helpers';
-import { authActions } from '../store';
 
+
+import { useDispatch } from "react-redux";
+import { authActions } from "../store";
+import { useNavigate } from "react-router-dom";
+import { sendAuthRequest } from "../api-helpers/Helpers";
 const Auth = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -106,7 +104,7 @@ const Auth = () => {
                 </Box>
             </form>
         </Box>
-    )
-}
+    );
+};
 
-export default Auth
+export default Auth;
