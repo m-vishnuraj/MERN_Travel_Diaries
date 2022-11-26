@@ -70,7 +70,6 @@ export const postUpdate = async (data, id) => {
 };
 
 
-
 export const postDelete = async (id) => {
     const res = await axios.delete(`/posts/${id}`)
         .catch((err) => console.log(err));
