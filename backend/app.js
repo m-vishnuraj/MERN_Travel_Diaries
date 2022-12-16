@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/user", userRouter);
 app.use("/posts", postRouter);
-
+// conn
 // connection to database
 mongoose
   .connect(
